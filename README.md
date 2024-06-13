@@ -1,41 +1,87 @@
-# Project Title
+# DegenToken Project
 
-Simple overview of use/purpose.
+This project is a smart contract deployment of an ERC20 token named "DegenToken" on the Avalanche Fuji Testnet. The primary purpose is to showcase token minting, burning, transferring, and a unique car redemption feature.
 
 ## Description
 
-An in-depth paragraph about your project and overview of use.
+DegenToken is an ERC20 token built using the OpenZeppelin library. The contract allows the owner to mint tokens, and any holder to burn their tokens. Additionally, users can transfer tokens to other addresses. A unique feature of DegenToken is the ability for users to redeem their tokens for luxury cars listed in a virtual showroom. Each car requires a certain amount of tokens to be redeemed, which are then burned from the user's balance.
 
 ## Getting Started
 
 ### Installing
 
-* How/where to download your program
-* Any modifications needed to be made to files/folders
+# Clone the repository:
+git clone https://github.com/shreyas66s/degentoken.git
+
+cd degentoken
+
+# Install dependencies:
+npm install
+
+# Set up environment variables:
+
+* Create a .env file in the root directory.
+* Add your private key and Snowtrace API key:
+  
+PRIVATE_KEY=your_private_key
+
+SNOWTRACE_API_KEY=your_snowtrace_api_key
+
 
 ### Executing program
 
-* How to run the program
-* Step-by-step bullets
-```
-code blocks for commands
-```
+# Deploy the contract:
+
+npx hardhat run scripts/deploy.js --network fuji
+
+
+# Verify the contract on Snowtrace:
+
+npx hardhat verify --network fuji 0xYourContractAddress
+
+# Interacting with the contract:
+
+* Mint tokens:
+
+npx hardhat console --network fuji
+
+const DegenToken = await ethers.getContractFactory("DegenToken");
+
+const degentoken = await DegenToken.attach("0xYourContractAddress");
+
+await degentoken.mint("0xRecipientAddress", 1000);
+
+* Burn tokens:
+
+await degentoken.burn(100);
+
+* Transfer tokens:
+
+await degentoken.transfer("0xRecipientAddress", 500);
+
+* Redeem a car:
+
+await degentoken.redeem(1); // Redeems the first car in the showroom
+
 
 ## Help
 
-Any advise for common problems or issues.
-```
-command to run if program contains helper info
-```
+If you encounter common problems or issues, try the following:
+
+* Ensure your .env file is correctly set up with the appropriate keys.
+* Check the network configuration in the hardhat.config.js file.
+* Make sure you have sufficient funds in your wallet to cover gas fees.
+For additional help, refer to the Hardhat documentation or use the command below for more information:
+
+npx hardhat help
 
 ## Authors
 
-Contributors names and contact info
+S Shreyas
 
-ex. Dominique Pizzie  
-ex. [@DomPizzie](https://twitter.com/dompizzie)
+[shreyas1665@gmail.com}
 
 
 ## License
 
-This project is licensed under the [NAME HERE] License - see the LICENSE.md file for details
+This project is licensed under the MIT License - see the LICENSE.md file for details
