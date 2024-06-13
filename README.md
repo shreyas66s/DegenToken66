@@ -1,6 +1,6 @@
 # DegenToken Project
 
-This project deploys an ERC20 token called "DegenToken" on the Avalanche Fuji Testnet. It demonstrates how to mint, burn, transfer tokens, and includes a special feature where users can redeem tokens for luxury cars.
+This project deploys an ERC20 token called "DegenToken" with the symbol "DGN" on the Avalanche Fuji Testnet. It demonstrates how to mint, burn, and transfer tokens, and includes a special feature where users can redeem tokens for luxury cars.
 
 ## Description
 
