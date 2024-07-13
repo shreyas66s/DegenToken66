@@ -6,6 +6,13 @@ This project deploys an ERC20 token called "DegenToken" with the symbol "DGN" on
 
 DegenToken is an ERC20 token built using the OpenZeppelin library. The contract allows the owner to mint tokens, and any holder to burn their tokens. Additionally, users can transfer tokens to other addresses. A unique feature of DegenToken is the ability for users to redeem their tokens for luxury cars listed in a virtual showroom. Each car requires a certain amount of tokens to be redeemed, which are then burned from the user's balance.
 
+## Redeemable Cars and Prices
+Mercedes AMG GT: 100,000 DGN.Quantity available: 2
+
+Lamborghini Aventador: 200,000 DGN.Quantity available: 1
+
+Ferrari SF90: 300,000 DGN.Quantity available: 2
+
 ## Getting Started
 
 ### Installing
