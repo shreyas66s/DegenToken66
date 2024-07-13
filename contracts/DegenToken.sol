@@ -5,15 +5,29 @@ import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Burnable.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
-contract DegenToken is ERC20,ERC20Burnable, Ownable {
-    mapping(address => string) public redeemed_car;
-    string[] public car_array;
-    string public car_showroom;
+contract DegenToken is ERC20, ERC20Burnable, Ownable {
+    struct Item {
+        string name;
+        uint256 price;
+        uint256 quantity;
+    }
 
-    constructor() ERC20("Degen", "DGN") {
-        car_showroom = "In our showroom we have : 1. Mercedes AMG GT , 2. Lamborghini Aventador, 3. Ferrari SF90 ";
-        car_array=["Mercedes AMG GT","Lamborghini Aventador","Ferrari SF90"];
-        
+    mapping(uint256 => Item) public redeemableItems;
+    uint256[] public itemIds;
+    mapping(address => string) public redeemedCar;
+    string public carShowroom;
+
+    constructor() ERC20("Degen", "DGN") Ownable(msg.sender) {
+        carShowroom = "In our showroom we have: 1. Mercedes AMG GT, 2. Lamborghini Aventador, 3. Ferrari SF90";
+        addItem(1, "Mercedes AMG GT", 100000,2);
+        addItem(2, "Lamborghini Aventador", 200000,1);
+        addItem(3, "Ferrari SF90", 300000,2);
+    }
+
+    function addItem(uint256 itemId, string memory name, uint256 price,uint _quantity) public onlyOwner {
+        require(redeemableItems[itemId].price == 0, "Item already exists");
+        redeemableItems[itemId] = Item(name, price,_quantity);
+        itemIds.push(itemId);
     }
 
     function mint(address _address, uint256 value) public onlyOwner {
@@ -29,13 +43,22 @@ contract DegenToken is ERC20,ERC20Burnable, Ownable {
         return true;
     }
 
-    function redeem(uint256 car_id) public {
-        require(car_id > 0 && car_id < 4, "There are only three cars in our showroom");
-        if(balanceOf(msg.sender) <= 300000){
-            revert("Insufficent funds to redeem. Should be greater than 300000");
+    function redeem(uint256 itemId) public {
+        Item memory item = redeemableItems[itemId];
+        require(item.price > 0, "Item does not exist");
+        require(item.quantity > 0, "Item is out of stock");
+        require(balanceOf(msg.sender) >= item.price, "Insufficient funds to redeem");
+
+        _burn(msg.sender, item.price);
+        item.quantity--;
+        redeemedCar[msg.sender] = item.name;
+    }
+
+    function getRedeemableItems() public view returns (Item[] memory) {
+        Item[] memory items = new Item[](itemIds.length);
+        for (uint256 i = 0; i < itemIds.length; i++) {
+            items[i] = redeemableItems[itemIds[i]];
         }
-        _burn(msg.sender, 100000 * car_id);
-        redeemed_car[msg.sender]=car_array[car_id-1]; 
-        
-    }   
+        return items;
+    }
 }
